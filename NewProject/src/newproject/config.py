@@ -8,11 +8,11 @@ class Settings(BaseSettings):
     db_port: int
     db_name: str
     db_user: str
-    db_password: str
+    db_password: SecretStr
     debug: bool = False
 
     def db_url(self) -> str:
-        return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_password.get_secret_value()}@{self.db_host}:{self.db_port}/{self.db_name}"
 
     model_config = SettingsConfigDict (
         env_file= f".env.{os.getenv('APP_ENV', 'stg')}",
