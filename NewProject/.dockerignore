@@ -24,9 +24,6 @@ ENV/
 env/
 .venv
 
-# Poetry lock (пересоздается в контейнере)
-poetry.lock
-
 # IDEs
 .vscode/
 .idea/

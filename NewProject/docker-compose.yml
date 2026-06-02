@@ -1,20 +1,17 @@
 services:
   postgres:
-    image: postgres:latest
-    env_file:
-      - .env.prod
+    image: postgres:18
     container_name: newproject_postgres
     environment:
-      POSTGRES_USER: ${DB_USER} #postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD} #secret
-      POSTGRES_DB: ${DB_NAME} #postgres
+      POSTGRES_USER: postgres #${DB_USER} #postgres
+      POSTGRES_PASSWORD: secret #${DB_PASSWORD} #secret
+      POSTGRES_DB: postgres #${DB_NAME} #postgres
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ['CMD-SHELL", "pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
-      test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d postgres'] #... -d "$$POSTGRES_DB"']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,16 +20,35 @@ services:
   traefik:
     image: traefik:v3.7
     container_name: newproject_traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--providers.docker.exposedByDefault=false"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - 80:80
+      - 443:443
+      - 8080:8080
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  app:
+    build: .
+    env_file:
+      - .env.prod
+    depends_on:
+      - postgres
+    expose:
+      - 8000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.routers.app.rule=Host(`localhost`)"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"
+
 volumes:
   postgres_data:
 
