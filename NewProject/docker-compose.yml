@@ -1,22 +1,25 @@
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:latest
+    env_file:
+      - .env.prod
     container_name: newproject_postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${DB_USER} #postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD} #secret
+      POSTGRES_DB: ${DB_NAME} #postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL", "pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 15s
 
 volumes:
   postgres_data:
+
+#grep -n 'err'
