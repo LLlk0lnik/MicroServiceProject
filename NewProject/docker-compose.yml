@@ -34,6 +34,8 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik_public
 
   app:
     build: .
@@ -48,6 +50,12 @@ services:
       - "traefik.http.routers.app.entrypoints=web"
       - "traefik.http.routers.app.rule=Host(`localhost`)"
       - "traefik.http.services.app.loadbalancer.server.port=8000"
+    networks:
+      - traefik_public
+
+#networks:
+#  traefik_public:
+#    external: true
 
 volumes:
   postgres_data:
