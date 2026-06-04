@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, text
-from src.db.session import Base
+from src.core.session import Base
 import enum
 
 

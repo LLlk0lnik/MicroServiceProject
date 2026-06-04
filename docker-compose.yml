@@ -40,7 +40,7 @@ services:
 #      - traefik_public
 
   app:
-    build: .
+    build: ms_auth
     env_file:
       - .env.prod
     depends_on:
