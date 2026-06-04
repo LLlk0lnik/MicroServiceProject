@@ -6,7 +6,7 @@ authors = [
     {name = "LLlk0lnik",email = "94215708+LLlk0lnik@users.noreply.github.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = "^3.12"
 dependencies = [
     "pydantic-settings (>=2.14.1,<3.0.0)",
     "python-dotenv (>=1.2.2,<2.0.0)",
