@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pydantic import SecretStr
 import os
 
+
 class Settings(BaseSettings):
     app_name: str
     db_host: str
@@ -15,10 +16,11 @@ class Settings(BaseSettings):
     def db_url(self) -> str:
         return f"postgresql+asyncpg://{self.db_user}:{self.db_password.get_secret_value()}@{self.db_host}:{self.db_port}/{self.db_name}"
 
-    model_config = SettingsConfigDict (
-        env_file= f".env.{os.getenv('APP_ENV', 'stg')}",
+    model_config = SettingsConfigDict(
+        env_file=f".env.{os.getenv('APP_ENV', 'stg')}",
         env_file_encoding="utf-8",
-        extra="ignore"
+        extra="ignore",
     )
+
 
 settings = Settings()
