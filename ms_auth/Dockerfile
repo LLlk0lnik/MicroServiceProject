@@ -1,11 +1,29 @@
-FROM python:3.12-slim
+FROM python:3.12-slim as builder
+
+RUN pip install poetry==2.4.1
+
+ENV POETRY_NO_INTERACTION=1\
+    POETRY_VIRTUALENVS_IN_PROJECT=1\
+    POETRY_VIRTUALENVS_CREATE=1\
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
 WORKDIR /app
-RUN pip install --no-cache-dir poetry==2.4.1
-ENV POETRY_VIRTUALENVS_CREATE=false
+
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-root --only main
-COPY src/ /app/src
+
 COPY README.md /app/README.md
-RUN poetry install --only-root
-EXPOSE 8000
+
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main
+
+FROM python:3.12-slim as runtime
+
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+COPY src/ /app/src
+
+WORKDIR /app
+
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
