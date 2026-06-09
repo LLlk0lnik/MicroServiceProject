@@ -2,9 +2,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 from pydantic import SecretStr
 import os
+from pathlib import Path
+from typing import ClassVar
 
 
 class Settings(BaseSettings):
+
+    BASE_DIR: ClassVar[Path] = Path(__file__).resolve().parent.parent.parent
+
     app_name: str
     db_host: str
     db_port: int
@@ -14,11 +19,18 @@ class Settings(BaseSettings):
     debug: bool = False
     db_url: str
 
-    # def db_url(self) -> str:
-    #     return f"postgresql+asyncpg://{self.db_user}:{self.db_password.get_secret_value()}@{self.db_host}:{self.db_port}/{self.db_name}"
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_DAYS: int
+
+    SMS_PROVIDER: str
+
+    CELERY_BROKER_URL: str
+    REDIS_URL: str
 
     model_config = SettingsConfigDict(
-        env_file=f".env.{os.getenv('APP_ENV', 'stg')}",
+        env_file=BASE_DIR / f".env.{os.getenv('APP_ENV', 'stg')}",
         env_file_encoding="utf-8",
         extra="ignore",
     )
