@@ -6,6 +6,7 @@ from src.domain.exceptions.domain_exceptions import (
     OTPMaxAttemptsExceeded,
 )
 
+
 @dataclass
 class OTP:
     id: int | None
@@ -20,7 +21,7 @@ class OTP:
     VALIDITY_SECONDS = 300
 
     @classmethod
-    def create(cls, employee_id: int, code_value: str) -> 'OTP':
+    def create(cls, employee_id: int, code_value: str) -> "OTP":
         now = datetime.now()
         return OTP(
             id=None,

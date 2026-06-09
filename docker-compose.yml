@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:18
+    image: postgres:18-alpine
     container_name: newproject_postgres
     env_file:
       - .env.prod
@@ -54,6 +54,45 @@ services:
       - "traefik.http.services.app.loadbalancer.server.port=8000"
 #    networks:
 #      - traefik_public
+
+  celery-worker:
+    build: ms_auth
+    container_name: ms_auth_celery_worker
+    entrypoint: ""
+    command: python -m celery -A src.core.celery_app worker --loglevel=info
+    env_file:
+      - .env.prod
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    volumes:
+      - ./ms_auth/src:/app/src
+
+  redis:
+    image: redis:8.8-alpine
+    container_name: automation_redis
+    restart: always
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:4.3.1-alpine
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=mquser
+      - RABBITMQ_DEFAULT_PASS=mqpassword
+      # - RABBITMQ_SERVER_ASSITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648 ( определяет порог при котором rabbitmq перестанет писать в стейт при свободном месте в 2 гб )
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
 
 #networks:
 #  traefik_public:

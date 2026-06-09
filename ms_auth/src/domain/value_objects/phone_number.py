@@ -2,6 +2,7 @@ import re
 from dataclasses import dataclass
 from src.domain.exceptions.domain_exceptions import InvalidPhoneNumber
 
+
 @dataclass(frozen=True)
 class PhoneNumber:
     value: str

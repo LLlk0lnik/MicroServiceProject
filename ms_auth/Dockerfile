@@ -1,4 +1,4 @@
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 RUN pip install poetry==2.4.1
 
@@ -15,7 +15,7 @@ COPY README.md /app/README.md
 
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main
 
-FROM python:3.12-slim as runtime
+FROM python:3.12-slim AS runtime
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
