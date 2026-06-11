@@ -1,7 +1,8 @@
 from celery import Celery
 from src.config import settings
 
-celery_app = Celery("ms_auth", settings.CELERY_BROKER_URL, backend=None)
+celery_app = Celery("ms_auth")
+celery_app.conf.broker_url = settings.CELERY_BROKER_URL
 
 celery_app.conf.update(
     task_serializer="json",

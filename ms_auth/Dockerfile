@@ -13,7 +13,7 @@ COPY pyproject.toml poetry.lock ./
 
 COPY README.md /app/README.md
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root --only main
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --no-root
 
 FROM python:3.12-slim AS runtime
 
@@ -26,4 +26,4 @@ COPY src/ /app/src
 
 WORKDIR /app
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
