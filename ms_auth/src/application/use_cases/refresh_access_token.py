@@ -19,6 +19,10 @@ class RefreshAccessTokenUseCase:
         self.uow = uow
 
     async def execute(self, refresh_token: str) -> dict:
+        token_entity = await self.uow.refresh_token.get_by_token(refresh_token)
+        if not token_entity or not token_entity.is_valid():
+            raise InvalidTokenException()
+
         payload = decode_refresh_token(refresh_token)
         if not payload:
             raise InvalidTokenException()

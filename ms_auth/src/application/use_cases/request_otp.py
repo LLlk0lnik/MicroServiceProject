@@ -20,7 +20,7 @@ class RequestOtpUseCase:
     async def execute(self, phone_number: str) -> None:
         phone_number_vo = PhoneNumber(phone_number)
 
-        employee = await self.uow.get_by_phone_number(phone_number_vo)
+        employee = await self.uow.employee.get_by_phone_number(phone_number_vo)
         if not employee:
             raise EmployeeNotFound()
         if not employee.is_active:

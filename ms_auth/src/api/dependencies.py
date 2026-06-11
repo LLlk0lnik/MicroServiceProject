@@ -3,7 +3,6 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.security.jwt_manager import decode_access_token
 from src.domain.entities.employee import Employee
-from src.core.external.sms_service_impl import create_sms_service
 from src.application.use_cases.request_otp import RequestOtpUseCase
 from src.application.use_cases.verify_otp import VerifyOTPUseCase
 from src.application.use_cases.refresh_access_token import RefreshAccessTokenUseCase

@@ -22,7 +22,7 @@ def async_cache(expire: int = 300):
             result = await func(*args, **kwargs)
 
             if result is not None:
-                await redis.setex(ket, expire, json.dumps(result, default=str))
+                await redis.setex(key, expire, json.dumps(result, default=str))
             return result
 
         return wrapper

@@ -23,7 +23,7 @@ class VerifyOTPUseCase:
         if not employee:
             raise EmployeeNotFound()
 
-        otp = await self.uow.OTP_code.get_last_unused_by_employee(employee.id)
+        otp = await self.uow.OTP.get_last_unused_by_employee(employee.id)
         if not otp:
             raise OTPInvalidException()
 

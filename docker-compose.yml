@@ -90,7 +90,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=mqpassword
       # - RABBITMQ_SERVER_ASSITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648 ( определяет порог при котором rabbitmq перестанет писать в стейт при свободном месте в 2 гб )
     volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
+      - ./rabbitmq:/var/lib/rabbitmq #разобраться с этой папкой надо чтобы инициализировалась бд 
     ports:
       - 15672:15672
 
@@ -102,3 +102,5 @@ volumes:
   postgres_data:
 
 #grep -n 'err'
+
+#

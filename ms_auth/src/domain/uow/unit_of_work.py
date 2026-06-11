@@ -6,8 +6,8 @@ from src.domain.repositories.refresh_token_repository import IRefreshTokenReposi
 
 class IUnitOfWork(ABC):
     employee: IEmployeeRepository
-    OTP_code: IOTPRepository
-    refresh_token: IRefreshTokenRepository
+    OTP: IOTPRepository
+    RefreshToken: IRefreshTokenRepository
 
     @abstractmethod
     async def commit(self) -> None:
