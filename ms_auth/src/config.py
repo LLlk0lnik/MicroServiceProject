@@ -26,6 +26,9 @@ class Settings(BaseSettings):
 
     SMS_PROVIDER: str
 
+    BOT_TOKEN: str
+    CHAT_ID: str
+
     CELERY_BROKER_URL: str
     REDIS_URL: str
 
