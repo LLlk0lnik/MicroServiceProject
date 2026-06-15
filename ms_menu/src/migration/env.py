@@ -7,15 +7,14 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-# импорты прописанные не автоматически
 from src.core.session import Base, DATABASE_URL
+from src.config import Settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-# дописываем какой URL юзать для подключения к бд
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -27,7 +26,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = (
     Base.metadata
-)  # дописываем где искать инфу о моделях none -> Base.metadata
+)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -60,7 +59,7 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, version_table_schema="auth") #
+    context.configure(connection=connection, target_metadata=target_metadata, version_table_schema="menu")
 
     with context.begin_transaction():
         context.run_migrations()

@@ -39,8 +39,10 @@ services:
 #    networks:
 #      - traefik_public
 
-  app:
+  auth:
     build: ms_auth
+    environment:
+      APP_NAME: ms_auth
     env_file:
       - .env.prod
     depends_on:
@@ -54,6 +56,22 @@ services:
       - "traefik.http.services.app.loadbalancer.server.port=8000"
 #    networks:
 #      - traefik_public
+
+  menu:
+    build: ms_menu
+    environment:
+      APP_NAME: ms_menu
+    env_file:
+      - .env.prod
+    depends_on:
+      - postgres
+    ports:
+      - 8001
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.routers.app.rule=Host(`localhost`)"
+      - "traefik.http.services.app.loadbalancer.server.port=8001"
 
   celery-worker:
     build: ms_auth
