@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from ms_menu.src.domain.repositories.position_repository import IPositionRepository
 from ms_menu.src.domain.entities.position import Position
 from ms_menu.src.domain.value_objects.title import Title
@@ -56,5 +56,25 @@ class PositionRepository(IPositionRepository):
         result = await self.session.execute(Select(PositionModel).where(PositionModel.title == title.value).limit(1))
         return result.scalar_one_or_none() is not None
 
+    async def get_filtered(
+        self,
+        category: Category | None = None,
+        is_available: bool | None = None,
+        limit: int = 100,
+        offset: int = 0
+    ) -> tuple[list[Position], int]:
+        query = select(PositionModel)
+        if category is not None:
+            query = query.where(PositionModel.category == category.value)
+        if is_available is not None:
+            query = query.where(PositionModel.is_available == is_available)
+
+        count_query = select(func.count()).select_from(query.subquery())
+        total = await self.session.scalar(count_query)
+
+        query = query.offset(offset).limit(limit)
+        result = await self.session.execute(query)
+        models = result.scalars().all()
+        return [to_domain(m) for m in models], total
 
 

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from ms_menu.src.domain.entities.super_position import SuperPosition
+from ms_menu.src.domain.entities.position import Position
 from ms_menu.src.domain.value_objects.title import Title
 
 class ISuperPositionRepository(ABC):
@@ -33,5 +34,14 @@ class ISuperPositionRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_position_not_in_super(self, super_position_id: int) -> list[SuperPosition]:
+    async def get_position_not_in_super(self, super_position_id: int) -> list[Position]:
+        pass
+
+    @abstractmethod
+    async def get_filtered(
+        self,
+        is_available: bool | None = None,
+        limit: int = 100,
+        offset: int = 0
+    ) -> tuple[list[SuperPosition], int]:
         pass

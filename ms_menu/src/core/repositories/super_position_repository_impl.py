@@ -1,8 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from ms_menu.src.domain.repositories.super_position_repository import ISuperPositionRepository
 from ms_menu.src.domain.entities.super_position import SuperPosition
+from ms_menu.src.domain.entities.position import Position
 from ms_menu.src.domain.value_objects.title import Title
 from ms_menu.src.core.models.super_position_model import SuperPositionModel
 from ms_menu.src.core.models.position_model import PositionModel
@@ -64,7 +65,7 @@ class SuperPositionRepository(ISuperPositionRepository):
         return await self.get_by_id(super_position.id)
 
 
-    async def get_position_not_in_super(self, super_position_id: int) -> list[SuperPosition]:
+    async def get_position_not_in_super(self, super_position_id: int) -> list[Position]:
         subquery = (select(super_position_items.c.position_id).where(super_position_items.c.super_position_id == super_position_id).subquery())
         result = await self.session.execute(
             select(PositionModel)
@@ -73,4 +74,21 @@ class SuperPositionRepository(ISuperPositionRepository):
         models = result.scalars().all()
         return [position_to_domain(model) for model in models]
 
+    async def get_filtered(
+        self,
+        is_available: bool | None = None,
+        limit: int = 100,
+        offset: int = 0
+    ) -> tuple[list[SuperPosition], int]:
+        query = select(SuperPositionModel)
+        if is_available is not None:
+            query = query.where(SuperPositionModel.is_available == is_available)
+
+        count_query = select(func.count()).select_from(query.subquery())
+        total = await self.session.scalar(count_query)
+
+        query = query.offset(offset).limit(limit)
+        result = await self.session.execute(query)
+        models = result.scalars().all()
+        return [to_domain(m) for m in models], total
 

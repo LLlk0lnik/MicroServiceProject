@@ -36,3 +36,13 @@ class IPositionRepository(ABC):
     @abstractmethod
     async def exists_by_title(self, title: Title) -> bool:
         pass
+
+    @abstractmethod
+    async def get_filtered(
+            self,
+            category: Category | None = None,
+            is_available: bool | None = None,
+            limit: int = 100,
+            offset: int = 0
+    ) -> tuple[list[Position], int]:
+        pass
