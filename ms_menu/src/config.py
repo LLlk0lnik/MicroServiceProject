@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     db_password: SecretStr
     db_url: str
     debug: bool = False
+    REDIS_URL: str
+
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / f".env.{os.getenv('APP_ENV', 'stg')}",

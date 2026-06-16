@@ -1,20 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 from ms_menu.src.domain.entities.super_position import SuperPosition
 from ms_menu.src.domain.value_objects.title import Title
 
 class ISuperPositionRepository(ABC):
 
     @abstractmethod
-    async def get_by_id(self, super_position_id: int) -> Optional[SuperPosition]:
+    async def get_by_id(self, super_position_id: int) -> SuperPosition | None:
         pass
 
     @abstractmethod
-    async def get_by_title(self, title: Title) -> Optional[SuperPosition]:
+    async def get_by_title(self, title: Title) -> SuperPosition | None:
         pass
 
     @abstractmethod
-    async def get_all_available(self) -> List[SuperPosition]:
+    async def get_all_available(self) -> list[SuperPosition]:
         pass
 
     @abstractmethod
@@ -34,6 +33,5 @@ class ISuperPositionRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_position_not_in_super(self, super_position_id: int) -> List[SuperPosition]:
+    async def get_position_not_in_super(self, super_position_id: int) -> list[SuperPosition]:
         pass
-    

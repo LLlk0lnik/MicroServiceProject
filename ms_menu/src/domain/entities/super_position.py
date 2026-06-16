@@ -13,9 +13,9 @@ from ms_menu.src.domain.exceptions.domain_exception import InvalidSuperPosition
 class SuperPosition:
     id: int | None
     title: Title
-    description: Description | None
-    positions: List[Position] = field(default_factory=list)
     created_at: datetime
+    description: Description | None = None
+    positions: List[Position] = field(default_factory=list)
     is_available: bool = True
 
     def __post_init__(self):
@@ -56,3 +56,8 @@ class SuperPosition:
         if not self.positions:
             raise InvalidSuperPosition("superposition must have at least one position")
 
+    def active(self) -> bool:
+        self.is_avaliable = True
+
+    def deactive(self) -> bool:
+        self.is_avaliable = False

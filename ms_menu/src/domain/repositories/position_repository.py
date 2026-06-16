@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 from ms_menu.src.domain.entities.position import Position
 from ms_menu.src.domain.value_objects.title import Title
 from ms_menu.src.domain.value_objects.category import Category
@@ -7,19 +6,19 @@ from ms_menu.src.domain.value_objects.category import Category
 class IPositionRepository(ABC):
 
     @abstractmethod
-    async def get_by_id(self, position_id: int) -> Optional[Position]:
+    async def get_by_id(self, position_id: int) -> Position | None:
         pass
 
     @abstractmethod
-    async def get_by_title(self, title: Title) -> Optional[Position]:
+    async def get_by_title(self, title: Title) -> Position | None:
         pass
 
     @abstractmethod
-    async def get_by_category(self, category: Category) -> List[Position]:
+    async def get_by_category(self, category: Category) -> list[Position]:
         pass
 
     @abstractmethod
-    async def get_all_avaliable(self) -> List[Position]:
+    async def get_all_avaliable(self) -> list[Position]:
         pass
 
     @abstractmethod
@@ -35,6 +34,5 @@ class IPositionRepository(ABC):
         pass
 
     @abstractmethod
-    async def exists_by_Title(self, title: Title) -> bool:
+    async def exists_by_title(self, title: Title) -> bool:
         pass
-    

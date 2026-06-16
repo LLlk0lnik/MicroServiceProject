@@ -3,7 +3,6 @@ from src.domain.value_objects.phone_number import PhoneNumber
 from src.domain.value_objects.employee_role import EmployeeRole
 from src.core.models.employee_model import EmployeeModel
 
-
 def to_domain(model: EmployeeModel) -> Employee:
     return Employee(
         id=model.id,
