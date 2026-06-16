@@ -1,6 +1,6 @@
 import json
 from functools import wraps
-from ms_menu.src.core.redis_client import get_redis
+from src.core.redis_client import get_redis
 
 def async_cache(expire=300):
     def decorator(func):

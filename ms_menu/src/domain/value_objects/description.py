@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ms_menu.src.domain.exceptions.domain_exception import InvalidDescription
+from src.domain.exceptions.domain_exception import InvalidDescription
 @dataclass(frozen=True)
 class Description:
     value: str | None

@@ -1,4 +1,4 @@
-from ms_menu.src.domain.uow.unit_of_work import IUnitOfWork
+from src.domain.uow.unit_of_work import IUnitOfWork
 
 class DeletePositionUseCase:
     def __init__(self, uow: IUnitOfWork):

@@ -1,9 +1,9 @@
-from ms_menu.src.application.dtos.super_position_dtos import SuperPositionCreateDTO
-from ms_menu.src.domain.entities.super_position import SuperPosition
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.domain.exceptions.domain_exception import PositionNotFound, InvalidSuperPosition
-from ms_menu.src.domain.uow.unit_of_work import IUnitOfWork
+from src.application.dtos.super_position_dtos import SuperPositionCreateDTO
+from src.domain.entities.super_position import SuperPosition
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.description import Description
+from src.domain.exceptions.domain_exception import PositionNotFound, InvalidSuperPosition
+from src.domain.uow.unit_of_work import IUnitOfWork
 from datetime import datetime
 
 class CreateSuperPositionUseCase:

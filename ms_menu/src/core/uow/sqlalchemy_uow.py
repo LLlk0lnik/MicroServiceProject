@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from ms_menu.src.domain.uow.unit_of_work import IUnitOfWork
-from ms_menu.src.core.repositories.position_repository_impl import PositionRepository
-from ms_menu.src.core.repositories.super_position_repository_impl import SuperPositionRepository
+from src.domain.uow.unit_of_work import IUnitOfWork
+from src.core.repositories.position_repository_impl import PositionRepository
+from src.core.repositories.super_position_repository_impl import SuperPositionRepository
 
 
 class SQLAlchemyUnitOfWork(IUnitOfWork):

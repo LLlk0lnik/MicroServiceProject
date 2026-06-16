@@ -2,12 +2,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.domain.value_objects.price import Price
-from ms_menu.src.domain.value_objects.calories import Calories
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.exceptions.domain_exception import InvalidSuperPosition
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.description import Description
+from src.domain.value_objects.price import Price
+from src.domain.value_objects.calories import Calories
+from src.domain.entities.position import Position
+from src.domain.exceptions.domain_exception import InvalidSuperPosition
 
 @dataclass
 class SuperPosition:

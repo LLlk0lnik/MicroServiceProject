@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ms_menu.src.domain.exceptions.domain_exception import InvalidComposition
+from src.domain.exceptions.domain_exception import InvalidComposition
 
 @dataclass(frozen=True)
 class Composition:

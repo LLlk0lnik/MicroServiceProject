@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from ms_menu.src.domain.exceptions.domain_exception import InvalidTitle
+from src.domain.exceptions.domain_exception import InvalidTitle
 
 @dataclass(frozen=True)
 class Title:

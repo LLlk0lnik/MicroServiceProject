@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.price import Price
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.domain.value_objects.composition import Composition
-from ms_menu.src.domain.value_objects.category import Category
-from ms_menu.src.domain.value_objects.calories import Calories
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.price import Price
+from src.domain.value_objects.description import Description
+from src.domain.value_objects.composition import Composition
+from src.domain.value_objects.category import Category
+from src.domain.value_objects.calories import Calories
 
 @dataclass
 class Position:

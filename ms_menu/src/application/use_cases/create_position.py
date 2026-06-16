@@ -1,12 +1,12 @@
-from ms_menu.src.application.dtos.position_dtos import PositionCreateDTO
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.price import Price
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.domain.value_objects.category import Category
-from ms_menu.src.domain.value_objects.composition import Composition
-from ms_menu.src.domain.value_objects.calories import Calories
-from ms_menu.src.domain.uow.unit_of_work import IUnitOfWork
+from src.application.dtos.position_dtos import PositionCreateDTO
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.price import Price
+from src.domain.value_objects.description import Description
+from src.domain.value_objects.category import Category
+from src.domain.value_objects.composition import Composition
+from src.domain.value_objects.calories import Calories
+from src.domain.uow.unit_of_work import IUnitOfWork
 from datetime import datetime
 
 class CreatePositionUseCase:

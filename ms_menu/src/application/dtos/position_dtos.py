@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from decimal import Decimal
-from ms_menu.src.domain.value_objects.category import Category
+from src.domain.value_objects.category import Category
 
 
 class PositionCreateDTO(BaseModel):

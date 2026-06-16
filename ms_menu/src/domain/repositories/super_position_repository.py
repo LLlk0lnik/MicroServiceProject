@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from ms_menu.src.domain.entities.super_position import SuperPosition
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
+from src.domain.entities.super_position import SuperPosition
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
 
 class ISuperPositionRepository(ABC):
 

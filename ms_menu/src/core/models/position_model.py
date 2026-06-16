@@ -1,9 +1,9 @@
 from sqlalchemy import String, Integer, Boolean, DateTime, func, Numeric
-from sqlalchemy.orm import Mapped, mapped_column
-from ms_menu.src.core.session import Base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.core.session import Base
 from decimal import Decimal
 from datetime import datetime
-from ms_menu.src.core.models.super_position_model import SuperPositionModel, super_position_items
+from src.core.models.associations import super_position_items
 
 class PositionModel(Base):
     __tablename__ = 'positions'
@@ -18,7 +18,7 @@ class PositionModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     is_available: Mapped[bool] = mapped_column(Boolean, default=True)
 
-    super_position: Mapped[list["SuperPositionModel"]] = relationship(
+    super_positions: Mapped[list["SuperPositionModel"]] = relationship(
         secondary=super_position_items,
         back_populates="positions",
         lazy="selectin"

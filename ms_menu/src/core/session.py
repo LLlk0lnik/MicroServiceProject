@@ -14,7 +14,7 @@ DATABASE_URL = settings.db_url
 engine = create_async_engine(url=DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
-async def get_async_engine() -> AsyncGenerator[AsyncSession, None]:
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSession() as session:
         yield session
 

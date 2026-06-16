@@ -1,16 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
-from ms_menu.src.domain.repositories.super_position_repository import ISuperPositionRepository
-from ms_menu.src.domain.entities.super_position import SuperPosition
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.core.models.super_position_model import SuperPositionModel
-from ms_menu.src.core.models.position_model import PositionModel
-from ms_menu.src.core.mappers.super_position_mapper import to_domain, to_orm
-from ms_menu.src.core.mappers.position_mapper import to_domain as position_to_domain
-from ms_menu.src.core.models.position_model import super_position_items
-from ms_menu.src.core.cache import async_cache
+from src.domain.repositories.super_position_repository import ISuperPositionRepository
+from src.domain.entities.super_position import SuperPosition
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
+from src.core.models.super_position_model import SuperPositionModel
+from src.core.models.position_model import PositionModel
+from src.core.mappers.super_position_mapper import to_domain, to_orm
+from src.core.mappers.position_mapper import to_domain as position_to_domain
+from src.core.models.position_model import super_position_items
+from src.core.cache import async_cache
 
 class SuperPositionRepository(ISuperPositionRepository):
     def __init__(self, session: AsyncSession):

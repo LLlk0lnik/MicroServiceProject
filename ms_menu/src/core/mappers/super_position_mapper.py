@@ -1,10 +1,10 @@
-from ms_menu.src.domain.entities.super_position import SuperPosition
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.core.models.super_position_model import SuperPositionModel
-from ms_menu.src.core.models.position_model import PositionModel
-from ms_menu.src.core.mappers.position_mapper import to_domain as position_to_domain, to_orm as position_to_orm
+from src.domain.entities.super_position import SuperPosition
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.description import Description
+from src.core.models.super_position_model import SuperPositionModel
+from src.core.models.position_model import PositionModel
+from src.core.mappers.position_mapper import to_domain as position_to_domain, to_orm as position_to_orm
 
 def to_domain(model: SuperPositionModel) -> SuperPosition:
     positions = [position_to_domain(position) for position in model.position] if model.position else []

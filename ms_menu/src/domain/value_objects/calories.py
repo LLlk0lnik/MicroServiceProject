@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ms_menu.src.domain.exceptions.domain_exception import InvalidCalories
+from src.domain.exceptions.domain_exception import InvalidCalories
 
 @dataclass(frozen=True)
 class Calories:

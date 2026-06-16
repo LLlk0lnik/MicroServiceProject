@@ -1,6 +1,6 @@
 from decimal import Decimal
 from dataclasses import dataclass
-from ms_menu.src.domain.exceptions.domain_exception import InvalidPrice
+from src.domain.exceptions.domain_exception import InvalidPrice
 
 @dataclass(frozen=True)
 class Price:

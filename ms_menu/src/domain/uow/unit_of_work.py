@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from ms_menu.src.domain.repositories.position_repository import IPositionRepository
-from ms_menu.src.domain.repositories.super_position_repository import ISuperPositionRepository
+from src.domain.repositories.position_repository import IPositionRepository
+from src.domain.repositories.super_position_repository import ISuperPositionRepository
 
 class IUnitOfWork(ABC):
     position: IPositionRepository

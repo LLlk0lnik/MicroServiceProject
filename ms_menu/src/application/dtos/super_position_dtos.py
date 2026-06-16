@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from decimal import Decimal
-from ms_menu.src.application.dtos.position_dtos import PositionResponseDTO
+from src.application.dtos.position_dtos import PositionResponseDTO
 
 
 class SuperPositionCreateDTO(BaseModel):

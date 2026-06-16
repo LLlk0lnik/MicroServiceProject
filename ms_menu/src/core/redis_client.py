@@ -1,5 +1,5 @@
 import redis.asyncio as aioredis
-from ms_menu.src.config import settings
+from src.config import settings
 
 _redis_client = None
 

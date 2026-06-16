@@ -1,12 +1,12 @@
 from decimal import Decimal
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.price import Price
-from ms_menu.src.domain.value_objects.category import Category
-from ms_menu.src.domain.value_objects.description import Description
-from ms_menu.src.domain.value_objects.composition import Composition
-from ms_menu.src.domain.value_objects.calories import Calories
-from ms_menu.src.core.models.position_model import PositionModel
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.price import Price
+from src.domain.value_objects.category import Category
+from src.domain.value_objects.description import Description
+from src.domain.value_objects.composition import Composition
+from src.domain.value_objects.calories import Calories
+from src.core.models.position_model import PositionModel
 
 def to_domain(model: PositionModel) -> Position:
     return Position(

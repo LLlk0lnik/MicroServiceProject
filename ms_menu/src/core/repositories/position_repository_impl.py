@@ -1,12 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from ms_menu.src.domain.repositories.position_repository import IPositionRepository
-from ms_menu.src.domain.entities.position import Position
-from ms_menu.src.domain.value_objects.title import Title
-from ms_menu.src.domain.value_objects.category import Category
-from ms_menu.src.core.models.position_model import PositionModel
-from ms_menu.src.core.mappers.position_mapper import to_domain, to_orm
-from ms_menu.src.core.cache import async_cache
+from src.domain.repositories.position_repository import IPositionRepository
+from src.domain.entities.position import Position
+from src.domain.value_objects.title import Title
+from src.domain.value_objects.category import Category
+from src.core.models.position_model import PositionModel
+from src.core.mappers.position_mapper import to_domain, to_orm
+from src.core.cache import async_cache
 
 class PositionRepository(IPositionRepository):
     def __init__(self, session: AsyncSession):
