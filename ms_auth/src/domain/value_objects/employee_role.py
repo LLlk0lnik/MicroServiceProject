@@ -14,10 +14,12 @@ class EmployeeRole(str, Enum):
                 Permission.CREATE_ORDER,
                 Permission.VIEW_ORDER,
                 Permission.MANAGE_EMPLOYMENT,
+                Permission.MANAGE_MENU,
             },
             EmployeeRole.MANAGER: {
                 Permission.CREATE_ORDER,
                 Permission.VIEW_ORDER,
+                Permission.MANAGE_MENU,
             },
             EmployeeRole.STAFF: {Permission.VIEW_ORDER},
             EmployeeRole.CLIENT: set(),

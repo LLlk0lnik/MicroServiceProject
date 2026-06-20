@@ -7,27 +7,12 @@ from src.application.use_cases.request_otp import RequestOtpUseCase
 from src.application.use_cases.verify_otp import VerifyOTPUseCase
 from src.application.use_cases.refresh_access_token import RefreshAccessTokenUseCase
 from src.application.use_cases.logout import LogoutUseCase
-from src.domain.value_objects.permission import Permission
 from src.core.session import get_session
 from src.core.uow.sqlalchemy_uow import SQLAlchemyUnitOfWork
 from src.application.use_cases.register_employee import RegisterEmployeeUseCase
+from src.application.use_cases.validate_token_permission import ValidateTokenPermissionUseCase
 
 security = HTTPBearer()
-
-
-def require_permission(permission: Permission):
-    async def permission_checher(
-        current_employee: Employee = Depends(get_current_employee),
-    ) -> Employee:
-        if not current_employee.has_permission(required_permission):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Missing permission: {required_permission.value}",
-            )
-        return current_employee
-
-    return permission_checher
-
 
 async def get_current_employee_payload(
     credentials: HTTPAuthorizationCredentials = Depends(security),
@@ -96,3 +81,9 @@ async def get_register_employee_use_case(
 ) -> RegisterEmployeeUseCase:
     uow = SQLAlchemyUnitOfWork(session)
     return RegisterEmployeeUseCase(uow)
+
+async def get_validate_token_permission_use_case(
+    session: AsyncSession = Depends(get_session),
+) -> ValidateTokenPermissionUseCase:
+    uow = SQLAlchemyUnitOfWork(session)
+    return ValidateTokenPermissionUseCase(uow)

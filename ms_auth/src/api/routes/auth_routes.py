@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Header, Query
 from src.application.use_cases.request_otp import RequestOtpUseCase
 from src.application.use_cases.verify_otp import VerifyOTPUseCase
 from src.application.use_cases.register_employee import RegisterEmployeeUseCase
@@ -7,6 +7,8 @@ from src.application.use_cases.refresh_access_token import (
     InvalidTokenException,
 )
 from src.application.use_cases.logout import LogoutUseCase
+from src.application.use_cases.validate_token_permission import ValidateTokenPermissionUseCase, \
+    InvalidAccessTokenException, PermissionDeniedException
 from src.application.dtos.auth_dtos import (
     RequestOTPRequest,
     VerifyOTPRequest,
@@ -30,7 +32,9 @@ from src.api.dependencies import (
     get_refresh_token_use_case,
     get_logout_use_case,
     get_register_employee_use_case,
+    get_validate_token_permission_use_case,
 )
+from src.domain.value_objects.permission import Permission
 
 router = APIRouter()
 
@@ -115,3 +119,22 @@ async def logout(
 ):
     await use_case.execute(request.refresh_token)
     return Response(status_code=204)
+
+@router.get("/validate")
+async def validate_token_permission(
+    authorization: str | None = Header(default=None),
+    permission: Permission = Query(...),
+    use_case: ValidateTokenPermissionUseCase = Depends(get_validate_token_permission_use_case),
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing bearer token")
+
+    token = authorization.removeprefix("Bearer ").strip()
+
+    try:
+        result = await use_case.execute(token, permission)
+        return result
+    except InvalidAccessTokenException:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    except PermissionDeniedException:
+        raise HTTPException(status_code=403, detail="Permission denied")
