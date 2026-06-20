@@ -51,9 +51,10 @@ services:
       - 8000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.entrypoints=web"
-      - "traefik.http.routers.app.rule=Host(`localhost`)"
-      - "traefik.http.services.app.loadbalancer.server.port=8000"
+      - "traefik.http.routers.auth-router.entrypoints=web"
+      - "traefik.http.routers.auth-router.rule=Host(`localhost`) && PathPrefix(`/auth`)"
+      - "traefik.http.routers.auth-router.service=auth-service"
+      - "traefik.http.services.auth-service.loadbalancer.server.port=8000"
 #    networks:
 #      - traefik_public
 
@@ -69,9 +70,16 @@ services:
       - 8001
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.entrypoints=web"
-      - "traefik.http.routers.app.rule=Host(`localhost`)"
-      - "traefik.http.services.app.loadbalancer.server.port=8001"
+      - "traefik.http.services.menu-service.loadbalancer.server.port=8001"
+      - "traefik.http.routers.menu-read-router.entrypoints=web"
+      - "traefik.http.routers.menu-read-router.rule=Host(`localhost`) && PathPrefix(`/menu`) && Method(`GET`)"
+      - "traefik.http.routers.menu-read-router.service=menu-service"
+      - "traefik.http.routers.menu-write-router.entrypoints=web"
+      - "traefik.http.routers.menu-write-router.rule=Host(`localhost`) && PathPrefix(`/menu`) && (Method(`POST`) || Method(`PUT`) || Method(`PATCH`) || Method(`DELETE`))"
+      - "traefik.http.routers.menu-write-router.service=menu-service"
+      - "traefik.http.routers.menu-write-router.middlewares=menu-auth"
+      - "traefik.http.middlewares.menu-auth.forwardauth.address=http://auth:8000/auth/validate?permission=manage_menu"
+      - "traefik.http.middlewares.menu-auth.forwardauth.authRequestHeaders=Authorization"
 
   celery-worker:
     build: ms_auth
@@ -118,5 +126,3 @@ volumes:
   postgres_data:
 
 #grep -n 'err'
-
-#
