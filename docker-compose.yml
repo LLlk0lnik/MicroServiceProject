@@ -18,6 +18,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+    networks:
+      - app_network
+
 
   traefik:
     image: traefik:v3.7
@@ -36,15 +39,14 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#    networks:
-#      - traefik_public
+    networks:
+      - app_network
+
 
   auth:
     build: ms_auth
-    environment:
-      APP_NAME: ms_auth
     env_file:
-      - .env.prod
+      - ./ms_auth/.env.config
     depends_on:
       - postgres
     ports:
@@ -55,22 +57,21 @@ services:
       - "traefik.http.routers.auth-router.rule=Host(`localhost`) && PathPrefix(`/auth`)"
       - "traefik.http.routers.auth-router.service=auth-service"
       - "traefik.http.services.auth-service.loadbalancer.server.port=8000"
-#    networks:
-#      - traefik_public
+    networks:
+      - app_network
+
 
   menu:
     build: ms_menu
-    environment:
-      APP_NAME: ms_menu
     env_file:
-      - .env.prod
+      - ./ms_menu/.env.config
     depends_on:
       - postgres
     ports:
-      - 8001
+      - 8000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.menu-service.loadbalancer.server.port=8001"
+      - "traefik.http.services.menu-service.loadbalancer.server.port=8000"
       - "traefik.http.routers.menu-read-router.entrypoints=web"
       - "traefik.http.routers.menu-read-router.rule=Host(`localhost`) && PathPrefix(`/menu`) && Method(`GET`)"
       - "traefik.http.routers.menu-read-router.service=menu-service"
@@ -80,6 +81,9 @@ services:
       - "traefik.http.routers.menu-write-router.middlewares=menu-auth"
       - "traefik.http.middlewares.menu-auth.forwardauth.address=http://auth:8000/auth/validate?permission=manage_menu"
       - "traefik.http.middlewares.menu-auth.forwardauth.authRequestHeaders=Authorization"
+    networks:
+      - app_network
+
 
   celery-worker:
     build: ms_auth
@@ -87,13 +91,16 @@ services:
     entrypoint: ""
     command: python -m celery -A src.core.celery_app worker --loglevel=info
     env_file:
-      - .env.prod
+      - ./ms_auth/.env.config
     depends_on:
       - postgres
       - rabbitmq
       - redis
-    volumes:
-      - ./ms_auth/src:/app/src
+#    volumes:
+#      - ./ms_auth/src:/app/src
+    networks:
+      - app_network
+
 
   redis:
     image: redis:8.8-alpine
@@ -106,6 +113,9 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    networks:
+      - app_network
+
 
   rabbitmq:
     image: rabbitmq:3.12-alpine
@@ -117,10 +127,13 @@ services:
       # - RABBITMQ_SERVER_ASSITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648 ( определяет порог при котором rabbitmq перестанет писать в стейт при свободном месте в 2 гб )
     ports:
       - 15672:15672
+    networks:
+      - app_network
 
-#networks:
-#  traefik_public:
-#    external: true
+
+networks:
+  app_network:
+    driver: bridge
 
 volumes:
   postgres_data:

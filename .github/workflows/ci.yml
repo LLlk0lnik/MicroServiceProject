@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-python:
+    name: Validate ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: auth
+            path: ms_auth
+            lockfile: ms_auth/poetry.lock
+          - service: menu
+            path: ms_menu
+            lockfile: ms_menu/poetry.lock
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "poetry"
+          cache-dependency-path: ${{ matrix.lockfile }}
+
+      - name: Install Poetry
+        run: pip install poetry==2.4.1
+
+      - name: Check Poetry metadata
+        working-directory: ./${{ matrix.path }}
+        run: poetry check
+
+      - name: Install dependencies
+        working-directory: ./${{ matrix.path }}
+        run: poetry install --no-root
+
+      - name: Compile Python sources
+        working-directory: ./${{ matrix.path }}
+        run: poetry run python -m compileall src
+
+  build-images:
+    name: Build ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    needs: validate-python
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: auth
+            context: ./ms_auth
+            dockerfile: ./ms_auth/Dockerfile
+            tag: auth:latest
+            is_celery: false
+          - image: menu
+            context: ./ms_menu
+            dockerfile: ./ms_menu/Dockerfile
+            tag: menu:latest
+            is_celery: false
+          - image: celery-worker
+            context: ./ms_auth
+            dockerfile: ./ms_auth/Dockerfile
+            tag: celery-worker:latest
+            is_celery: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        if: ${{ !matrix.is_celery }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: false
+          tags: ${{ matrix.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build celery worker image
+        if: ${{ matrix.is_celery }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: false
+          tags: ${{ matrix.tag }}
+          build-args: |
+            CMD=python -m celery -A src.core.celery_app worker --loglevel=info
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

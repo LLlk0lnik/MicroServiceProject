@@ -3,6 +3,8 @@
 .env.prod
 .env.stg
 .env.local
+ms_auth/.env.config
+ms_menu/.env.config
 
 # Python
 __pycache__/
