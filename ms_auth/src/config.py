@@ -1,14 +1,13 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from dotenv import load_dotenv
-from pydantic import SecretStr
-import os
 from pathlib import Path
 from typing import ClassVar
+
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
 
-    BASE_DIR: ClassVar[Path] = Path(__file__).resolve().parent.parent.parent
+    SERVICE_DIR: ClassVar[Path] = Path(__file__).resolve().parent.parent
 
     db_host: str
     db_port: int
@@ -32,7 +31,7 @@ class Settings(BaseSettings):
     REDIS_URL: str
 
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR / f".env.{os.getenv('APP_ENV', 'stg')}",
+        env_file=SERVICE_DIR / ".env.config",
         env_file_encoding="utf-8",
         extra="ignore",
     )

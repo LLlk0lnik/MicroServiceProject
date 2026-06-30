@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -12,7 +12,7 @@ class RefreshToken:
     created_at: datetime
 
     def is_valid(self) -> bool:
-        return not self.is_revoked and datetime.now() < self.expires_at
+        return not self.is_revoked and datetime.now(timezone.utc) < self.expires_at
 
     def revoke(self) -> None:
         self.is_revoked = True

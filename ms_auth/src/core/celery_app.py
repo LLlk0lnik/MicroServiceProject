@@ -14,4 +14,4 @@ celery_app.conf.update(
     task_time_limit=15 * 60,
 )
 
-celery_app.autodiscover_tasks(["src.core.task"])
+celery_app.autodiscover_tasks(["src.core.tasks.sms_task"])

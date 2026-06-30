@@ -1,14 +1,16 @@
 import asyncio
 from logging.config import fileConfig
 
-from sqlalchemy import pool
+from sqlalchemy import pool, text
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-# импорты прописанные не автоматически
 from src.core.session import Base, DATABASE_URL
+from src.core.models.employee_model import EmployeeModel
+from src.core.models.otp_models import OTPModel
+from src.core.models.refresh_token_model import RefreshTokenModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -53,15 +55,30 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_schemas=True,
+        version_table_schema="auth",
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
 
-def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, version_table_schema="auth") #
+def include_name(name, type_, parent_names):
+    if type_ == "schema":
+        return name == "auth"
+    return True
 
+
+
+def do_run_migrations(connection: Connection) -> None:
+    connection.execute(text("CREATE SCHEMA IF NOT EXISTS auth"))
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        include_schemas=True,
+        version_table_schema="auth",
+        include_name=include_name,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

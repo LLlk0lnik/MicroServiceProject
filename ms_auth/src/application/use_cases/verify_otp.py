@@ -23,7 +23,7 @@ class VerifyOTPUseCase:
         if not employee:
             raise EmployeeNotFound()
 
-        otp = await self.uow.OTP.get_last_unused_by_employee(employee.id)
+        otp = await self.uow.otp.get_last_unused_by_employee(employee.id)
         if not otp:
             raise OTPInvalidException()
 
@@ -34,16 +34,16 @@ class VerifyOTPUseCase:
             OTPMaxAttemptsExceeded,
             OTPInvalidException,
         ) as e:
-            await self.uow.OTP_code.update(otp)
+            await self.uow.otp.update(otp)
             await self.uow.commit()
             raise e
 
         if not is_valid:
-            await self.uow.OTP_code.update(otp)
+            await self.uow.otp.update(otp)
             await self.uow.commit()
             raise OTPInvalidException()
 
-        await self.uow.OTP_code.update(otp)
+        await self.uow.otp.update(otp)
 
         access_token_data = {
             "sub": str(employee.id),
@@ -67,7 +67,7 @@ class VerifyOTPUseCase:
             created_at=datetime.now(),
         )
 
-        await self.uow.refresh_token.add(refresh_token_entity)
+        await self.uow.RefreshToken.add(refresh_token_entity)
         await self.uow.commit()
 
         return {

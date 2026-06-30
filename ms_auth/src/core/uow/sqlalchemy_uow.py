@@ -9,7 +9,7 @@ class SQLAlchemyUnitOfWork(IUnitOfWork):
     def __init__(self, session: AsyncSession):
         self._session = session
         self.employee = EmployeeRepository(session)
-        self.OTP = OTPRepository(session)
+        self.otp = OTPRepository(session)
         self.RefreshToken = RefreshTokenRepository(session)
 
     async def commit(self) -> None:

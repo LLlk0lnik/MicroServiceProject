@@ -68,10 +68,10 @@ services:
     depends_on:
       - postgres
     ports:
-      - 8000
+      - 8001
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.menu-service.loadbalancer.server.port=8000"
+      - "traefik.http.services.menu-service.loadbalancer.server.port=8001"
       - "traefik.http.routers.menu-read-router.entrypoints=web"
       - "traefik.http.routers.menu-read-router.rule=Host(`localhost`) && PathPrefix(`/menu`) && Method(`GET`)"
       - "traefik.http.routers.menu-read-router.service=menu-service"

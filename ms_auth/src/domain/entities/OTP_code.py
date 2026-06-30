@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.domain.exceptions.domain_exceptions import (
     OTPExpiredException,
     OTPInvalidException,
@@ -22,7 +22,7 @@ class OTP:
 
     @classmethod
     def create(cls, employee_id: int, code_value: str) -> "OTP":
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
         return OTP(
             id=None,
             employee_id=employee_id,
@@ -36,7 +36,7 @@ class OTP:
     def verify(self, input_code: str) -> bool:
         if self.is_used:
             raise OTPInvalidException()
-        if datetime.now() > self.expires_at:
+        if datetime.now(timezone.utc) > self.expires_at:
             raise OTPExpiredException()
         if self.attempts >= self.MAX_ATTEMPTS:
             raise OTPMaxAttemptsExceeded()

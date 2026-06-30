@@ -18,13 +18,13 @@ class TelegramSMSService(ISMSService):
     async def send_otp(self, phone_number: str, code: str) -> None:
         message_text = f"OTP code: `{code}`\nfor phone number: `{phone_number}`"
         payload = {
-            "chat_id": settings.chat_id,
+            "chat_id": settings.CHAT_ID,
             "text": message_text,
             "parse_mode": "Markdown"
         }
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.post(self.api_url, jspn=payload) as resp:
+                async with session.post(self.api_url, json=payload) as resp:
                     if resp.status != 200:
                         error_text = await resp.text()
                         logger.error(f"erorr: {resp.status}: {error_text}")
@@ -37,9 +37,13 @@ def create_sms_service() -> ISMSService:
     if settings.SMS_PROVIDER == "mock":
         return MockSMSService()
     elif settings.SMS_PROVIDER == "telegram":
+        if not settings.BOT_TOKEN:
+            raise ValueError("TELEGRAM_BOT_TOKEN is not set")
+        if not settings.CHAT_ID:
+            raise ValueError("TELEGRAM_CHAT_ID is not set")
         return TelegramSMSService(
-            bot_token=settings.TELEGRAM_BOT_TOKEN,
-            chat_id=settings.TELEGRAM_CHAT_ID,
+            bot_token=settings.BOT_TOKEN,
+            chat_id=settings.CHAT_ID,
         )
     else:
         raise ValueError(f"Unknown sms provider: [{settings.SMS_PROVIDER}]")

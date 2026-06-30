@@ -9,7 +9,7 @@ class OTPModel(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     employee_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("employees.id", ondelete="CASCADE")
+        Integer, ForeignKey("auth.employees.id", ondelete="CASCADE")
     )
     code: Mapped[str] = mapped_column(String(6), nullable=False)
     expires_at: Mapped[datetime] = mapped_column(

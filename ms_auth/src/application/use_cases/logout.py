@@ -11,8 +11,8 @@ class LogoutUseCase:
         if not payload:
             return
 
-        token_entity = await self.uow.refresh_token.get_by_token(refresh_token)
+        token_entity = await self.uow.RefreshToken.get_by_token(refresh_token)
         if token_entity and not token_entity.is_revoked:
             token_entity.revoke()
-            await self.uow.refresh_token.update(token_entity)
+            await self.uow.RefreshToken.update(token_entity)
             await self.uow.commit()

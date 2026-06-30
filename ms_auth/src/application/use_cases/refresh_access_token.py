@@ -19,7 +19,7 @@ class RefreshAccessTokenUseCase:
         self.uow = uow
 
     async def execute(self, refresh_token: str) -> dict:
-        token_entity = await self.uow.refresh_token.get_by_token(refresh_token)
+        token_entity = await self.uow.RefreshToken.get_by_token(refresh_token)
         if not token_entity or not token_entity.is_valid():
             raise InvalidTokenException()
 
@@ -29,7 +29,7 @@ class RefreshAccessTokenUseCase:
 
         employee_id = int(payload.get("sub"))
 
-        token_entity = await self.uow.refresh_token.get_by_token(refresh_token)
+        token_entity = await self.uow.RefreshToken.get_by_token(refresh_token)
 
         if not token_entity or not token_entity.is_valid():
             raise InvalidTokenException()
@@ -40,7 +40,7 @@ class RefreshAccessTokenUseCase:
             raise EmployeeNotFound()
 
         token_entity.revoke()
-        await self.uow.refresh_token.update(token_entity)
+        await self.uow.RefreshToken.update(token_entity)
 
         access_token_data = {
             "sub": str(employee.id),
@@ -61,7 +61,7 @@ class RefreshAccessTokenUseCase:
             created_at=datetime.now(),
         )
 
-        await self.uow.refresh_token.add(new_token_entity)
+        await self.uow.RefreshToken.add(new_token_entity)
 
         await self.uow.commit()
 
