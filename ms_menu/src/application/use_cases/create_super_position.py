@@ -12,7 +12,7 @@ class CreateSuperPositionUseCase:
 
     async def execute(self, dto: SuperPositionCreateDTO) -> SuperPosition:
         title_vo = Title(dto.title)
-        existing = await self.uow.superposition.get_by_title(title_vo)
+        existing = await self.uow.super_position.get_by_title(title_vo)
         if existing:
             raise ValueError("SuperPosition with this title already exists")
 
@@ -32,6 +32,6 @@ class CreateSuperPositionUseCase:
             is_available=True,
         )
 
-        super_position = await self.uow.superposition.add(super_position)
+        super_position = await self.uow.super_position.add(super_position)
         await self.uow.commit()
         return super_position

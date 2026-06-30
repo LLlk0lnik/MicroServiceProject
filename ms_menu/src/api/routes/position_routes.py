@@ -103,12 +103,16 @@ async def get_positions(
     offset: int = Query(0, ge=0),
     use_case: GetPositionsUseCase = Depends(get_get_positions_use_case),
 ):
-    positions, total = await use_case.execute(
-        category=category,
-        is_available=is_available,
-        limit=limit,
-        offset=offset,
-    )
+    try:
+        positions, total = await use_case.execute(
+            category=category,
+            is_available=is_available,
+            limit=limit,
+            offset=offset,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
     items = [
         PositionResponseDTO(
             id=p.id,

@@ -18,7 +18,7 @@ def to_domain(model: PositionModel) -> Position:
         composition=Composition(model.composition) if model.composition else None,
         calories=Calories(model.calories) if model.calories is not None else None,
         created_at=model.created_at,
-        is_avaliable=model.is_avaliable,
+        is_avaliable=model.is_available,
     )
 
 def to_orm(entity: Position) -> PositionModel:
@@ -31,5 +31,5 @@ def to_orm(entity: Position) -> PositionModel:
         composition=entity.composition.value if entity.composition else None,
         calories=entity.calories.value if entity.calories is not None else None,
         created_at=entity.created_at,
-        is_avaliable=entity.avaliable,
+        is_available=entity.is_avaliable,
     )

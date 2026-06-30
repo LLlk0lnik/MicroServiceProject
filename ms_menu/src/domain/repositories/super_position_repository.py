@@ -34,8 +34,11 @@ class ISuperPositionRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_position_not_in_super(self, super_position_id: int) -> list[Position]:
+    async def get_positions_not_in_super(self, super_position_id: int) -> list[Position]:
         pass
+
+    async def get_position_not_in_super(self, super_position_id: int) -> list[Position]:
+        return await self.get_positions_not_in_super(super_position_id)
 
     @abstractmethod
     async def get_filtered(

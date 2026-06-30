@@ -8,7 +8,8 @@ class SQLAlchemyUnitOfWork(IUnitOfWork):
     def __init__(self, session: AsyncSession):
         self._session = session
         self.position = PositionRepository(session)
-        self.superposition = SuperPositionRepository(session)
+        self.super_position = SuperPositionRepository(session)
+        self.superposition = self.super_position
 
     async def commit(self) -> None:
         await self._session.commit()

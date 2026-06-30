@@ -19,7 +19,7 @@ class SuperPosition:
     is_available: bool = True
 
     def __post_init__(self):
-        if not seld.positions:
+        if not self.positions:
             raise InvalidSuperPosition("superposition must have at least one position")
         first_currency = self.positions[0].price.currency
         for p in self.positions[1:]:
@@ -37,6 +37,9 @@ class SuperPosition:
 
     @property
     def total_calories(self) -> Calories | None:
+        if any(p.calories is None for p in self.positions):
+            return None
+
         total = Calories(0)
         for p in self.positions:
             total += p.calories
@@ -44,7 +47,15 @@ class SuperPosition:
 
     @property
     def composition_summary(self) -> str:
-        return ", ".join(p.title for p in self.positions)
+        return ", ".join(p.title.value for p in self.positions)
+
+    @property
+    def is_avaliable(self) -> bool:
+        return self.is_available
+
+    @is_avaliable.setter
+    def is_avaliable(self, value: bool) -> None:
+        self.is_available = value
 
     def add_position(self, position: Position) -> None:
         if position.price.currency != self.positions[0].price.currency:
@@ -56,8 +67,8 @@ class SuperPosition:
         if not self.positions:
             raise InvalidSuperPosition("superposition must have at least one position")
 
-    def active(self) -> bool:
-        self.is_avaliable = True
+    def active(self) -> None:
+        self.is_available = True
 
-    def deactive(self) -> bool:
-        self.is_avaliable = False
+    def deactive(self) -> None:
+        self.is_available = False

@@ -6,7 +6,7 @@ class Calories:
     value: int | None
 
     def __post_init__(self):
-        if self.value is not None and self.value < 0 or self.value > 10000:
+        if self.value is not None and self.value < 0:
             raise InvalidCalories("invalid calories")
 
     def __add__(self, other: 'Calories') -> 'Calories':

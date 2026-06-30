@@ -6,5 +6,5 @@ class GetPositionsNotInSuperPositionUseCase:
         self.uow = uow
 
     async def execute(self, super_position_id: int) -> list[Position]:
-        positions = await self.uow.superposition.get_positions_not_in_super(super_position_id)
+        positions = await self.uow.super_position.get_positions_not_in_super(super_position_id)
         return positions

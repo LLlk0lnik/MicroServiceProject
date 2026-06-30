@@ -7,7 +7,7 @@ from src.core.models.position_model import PositionModel
 from src.core.mappers.position_mapper import to_domain as position_to_domain, to_orm as position_to_orm
 
 def to_domain(model: SuperPositionModel) -> SuperPosition:
-    positions = [position_to_domain(position) for position in model.position] if model.position else []
+    positions = [position_to_domain(position) for position in model.positions] if model.positions else []
     return SuperPosition(
         id=model.id,
         title=Title(model.title),

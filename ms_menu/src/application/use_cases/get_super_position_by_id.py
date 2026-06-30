@@ -6,7 +6,7 @@ class GetSuperPositionByIdUseCase:
         self.uow = uow
 
     async def execute(self, super_position_id: int) -> SuperPosition:
-        super_position = await self.uow.superposition.get_by_id(super_position_id)
+        super_position = await self.uow.super_position.get_by_id(super_position_id)
         if not super_position:
             raise ValueError(f"SuperPosition with id {super_position_id} not found")
         return super_position

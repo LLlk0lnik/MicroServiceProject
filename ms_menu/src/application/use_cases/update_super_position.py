@@ -10,13 +10,13 @@ class UpdateSuperPositionUseCase:
         self.uow = uow
 
     async def execute(self, super_position_id: int, dto: SuperPositionUpdateDTO) -> SuperPosition:
-        super_position = await self.uow.superposition.get_by_id(super_position_id)
+        super_position = await self.uow.super_position.get_by_id(super_position_id)
         if not super_position:
             raise ValueError(f"SuperPosition with id {super_position_id} not found")
 
         if dto.title is not None:
             new_title = Title(dto.title)
-            existing = await self.uow.superposition.get_by_title(new_title)
+            existing = await self.uow.super_position.get_by_title(new_title)
             if existing and existing.id != super_position_id:
                 raise ValueError("SuperPosition with this title already exists")
             super_position.title = new_title
@@ -45,6 +45,6 @@ class UpdateSuperPositionUseCase:
         if dto.is_available is not None:
             super_position.is_available = dto.is_available
 
-        super_position = await self.uow.superposition.update(super_position)
+        super_position = await self.uow.super_position.update(super_position)
         await self.uow.commit()
         return super_position

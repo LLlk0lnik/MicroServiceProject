@@ -11,7 +11,7 @@ class GetSuperPositionsUseCase:
         limit: int = 100,
         offset: int = 0
     ) -> tuple[list[SuperPosition], int]:
-        super_positions, total = await self.uow.superposition.get_filtered(
+        super_positions, total = await self.uow.super_position.get_filtered(
             is_available=is_available,
             limit=limit,
             offset=offset

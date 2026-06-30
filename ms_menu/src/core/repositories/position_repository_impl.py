@@ -6,13 +6,11 @@ from src.domain.value_objects.title import Title
 from src.domain.value_objects.category import Category
 from src.core.models.position_model import PositionModel
 from src.core.mappers.position_mapper import to_domain, to_orm
-from src.core.cache import async_cache
 
 class PositionRepository(IPositionRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    @async_cache(expire=60)
     async def get_by_id(self, position_id: int) -> Position | None:
         result = await self.session.execute(select(PositionModel).where(PositionModel.id == position_id))
         model = result.scalar_one_or_none()
@@ -29,9 +27,12 @@ class PositionRepository(IPositionRepository):
         return [to_domain(model) for model in models]
 
     async def get_all_avaliable(self) -> list[Position]:
-        result = await self.session.execute(select(PositionModel).where(PositionModel.avaliable == True))
+        result = await self.session.execute(select(PositionModel).where(PositionModel.is_available == True))
         models = result.scalars().all()
         return [to_domain(model) for model in models]
+
+    async def get_all_available(self) -> list[Position]:
+        return await self.get_all_avaliable()
 
     async def add(self, position: Position) -> Position:
         model = to_orm(position)
@@ -48,12 +49,12 @@ class PositionRepository(IPositionRepository):
 
     async def update(self, position: Position) -> Position:
         model = to_orm(position)
-        merged_mmodel = await self.session.merge(model)
+        merged_model = await self.session.merge(model)
         await self.session.flush()
-        return to_domain(merged_mmodel)
+        return to_domain(merged_model)
 
     async def exists_by_title(self, title: Title) -> bool:
-        result = await self.session.execute(Select(PositionModel).where(PositionModel.title == title.value).limit(1))
+        result = await self.session.execute(select(PositionModel).where(PositionModel.title == title.value).limit(1))
         return result.scalar_one_or_none() is not None
 
     async def get_filtered(
@@ -76,5 +77,3 @@ class PositionRepository(IPositionRepository):
         result = await self.session.execute(query)
         models = result.scalars().all()
         return [to_domain(m) for m in models], total
-
-

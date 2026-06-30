@@ -19,6 +19,14 @@ class Position:
     created_at: datetime
     is_avaliable: bool = True
 
+    @property
+    def is_available(self) -> bool:
+        return self.is_avaliable
+
+    @is_available.setter
+    def is_available(self, value: bool) -> None:
+        self.is_avaliable = value
+
     def update_price(self, new_price: Price) -> None:
         self.price = new_price
 
@@ -28,9 +36,8 @@ class Position:
     def update_composition(self, new_composition: Composition) -> None:
         self.composition = new_composition
 
-    def active(self) -> bool:
+    def active(self) -> None:
         self.is_avaliable = True
 
-    def deactive(self) -> bool:
+    def deactive(self) -> None:
         self.is_avaliable = False
-

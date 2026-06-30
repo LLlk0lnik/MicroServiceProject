@@ -16,5 +16,5 @@ class SuperPositionModel(Base):
     positions: Mapped[list["PositionModel"]] = relationship(
         secondary=super_position_items,
         back_populates="super_positions",
-        lazy="dynamic"
+        lazy="selectin"
     )

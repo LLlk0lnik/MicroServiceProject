@@ -1,14 +1,16 @@
 import asyncio
 from logging.config import fileConfig
 
-from sqlalchemy import pool
+from sqlalchemy import pool, text
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
 from src.core.session import Base, DATABASE_URL
-from src.config import Settings
+from src.core.models.associations import super_position_items
+from src.core.models.position_model import PositionModel
+from src.core.models.super_position_model import SuperPositionModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -52,14 +54,28 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_schemas=True,
+        version_table_schema="menu",
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
+def include_name(name, type_, parent_names):
+    if type_ == "schema":
+        return name == "menu"   # только схема menu
+    return True
+
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, version_table_schema="menu")
+    connection.execute(text("CREATE SCHEMA IF NOT EXISTS menu"))
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        include_schemas=True,
+        version_table_schema="menu",
+        include_name=include_name,
+    )
 
     with context.begin_transaction():
         context.run_migrations()

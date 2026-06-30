@@ -21,6 +21,9 @@ class IPositionRepository(ABC):
     async def get_all_avaliable(self) -> list[Position]:
         pass
 
+    async def get_all_available(self) -> list[Position]:
+        return await self.get_all_avaliable()
+
     @abstractmethod
     async def add(self, position: Position) -> Position:
         pass

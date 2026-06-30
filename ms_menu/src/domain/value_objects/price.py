@@ -8,11 +8,13 @@ class Price:
     currency: str = "RUB"
 
     def __post_init__(self):
+        if not isinstance(self.amount, Decimal):
+            object.__setattr__(self, "amount", Decimal(str(self.amount)))
         if self.amount < 0:
             raise InvalidPrice("Price cannot be negative")
-        if self.amount.as_tuple().ecponent < -2:
+        if self.amount.as_tuple().exponent < -2:
             raise InvalidPrice("Price doesnt have more two characters after point")
-        if self.currency not in ("RUB"):
+        if self.currency != "RUB":
             raise InvalidPrice("Not supported this currency")
 
     def __add__(self, other: 'Price') -> 'Price':
